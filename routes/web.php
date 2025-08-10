@@ -16,3 +16,7 @@ use App\Http\Controllers\TaskController;
 */
 Route::get('/', [HomeController::class,'index'])->name('home');
 Route::post('/tasks/viewTask', [TaskController::class,'viewTask'])->name('viewTask');
+Route::post('/tasks/updateTask', [TaskController::class,'updateTask'])->name('updateTask');
+Route::post('/tasks/createTask', [TaskController::class,'createTask'])->name('createTask');
+Route::post('/tasks/warningTask', [TaskController::class,'warningTask'])->name('warningTask');
+Route::post('/tasks/deleteTask', [TaskController::class,'deleteTask'])->name('deleteTask');

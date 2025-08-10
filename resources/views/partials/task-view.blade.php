@@ -16,11 +16,21 @@ use App\Models\Mode;
              * Action Buttons
              */
             switch($mode) {
-                case Mode::EDIT_MODE: { ?>
-                    <a id="modal-save" class="px-6 py-3 rounded-xl bg-green-400 hover:bg-green-500 text-white font-bold cursor-pointer transition">
+                case Mode::CREATE_MODE: { ?>
+                    <a id="modal-create-save" class="px-6 py-3 rounded-xl bg-green-400 hover:bg-green-500 text-white font-bold cursor-pointer transition">
                         Save
                     </a>
-                <?php } break; 
+                <?php } break;
+                case Mode::EDIT_MODE: { ?>
+                    <a id="modal-edit-save" class="px-6 py-3 rounded-xl bg-green-400 hover:bg-green-500 text-white font-bold cursor-pointer transition">
+                        Save
+                    </a>
+                <?php } break;
+                case MODE::WARNING_MODE: { ?>
+                    <a id="modal-delete" class="px-6 py-3 rounded-xl bg-red-400 hover:bg-red-500 text-white font-bold cursor-pointer transition">
+                        Delete Task
+                    </a>
+                <?php } break;
             } ?>
             <a id="modal-close" class="ml-auto px-6 py-3 rounded-xl bg-gray-400 hover:bg-gray-500 text-white font-bold cursor-pointer transition">
                 Close
@@ -61,6 +71,40 @@ use App\Models\Mode;
                 </div>
             </div>
         <?php } break;
+        case Mode::CREATE_MODE: { ?>
+            <div class="flex flex-col gap-6 w-full p-6 mt-8 rounded-xl bg-gray-200">
+                <div class="flex flex-row items-center w-full px-10 py-6 rounded-xl bg-gray-100">
+                    <span class="font-bold min-w-1/6 mr-4">Task Title:</span>
+                    <input 
+                        class="bg-white w-1/2 py-1 px-3 rounded-lg text-md" 
+                        type="text" 
+                        id="CREATE_TASK10_TITL"
+                        name="TASK10_TITL"
+                    />
+                </div>
+                <div class="flex flex-row items-center w-full px-10 py-6 rounded-xl bg-gray-100">
+                    <span class="font-bold min-w-1/6 mr-4">Task Description:</span>
+                    <textarea class="w-full bg-white py-1 px-3 rounded-lg text-md" name="TASK10_DESC" id="CREATE_TASK10_DESC"></textarea>
+                </div>
+                <div class="flex flex-row items-center w-full px-10 py-6 rounded-xl bg-gray-100">
+                    <span class="font-bold min-w-1/6 mr-4">Task Status:</span>
+                    <select class="bg-white py-1 px-3 rounded-lg text-md" name="TASK10_STUS" id="CREATE_TASK10_STUS">
+                        <option value="0" selected="selected">Incomplete</option>
+                        <option value="1">In Progress</option>
+                        <option value="2">Complete</option>
+                    </select>
+                </div>
+                <div class="flex flex-row items-center w-full px-10 py-6 rounded-xl bg-gray-100">
+                    <span class="font-bold min-w-1/6 mr-4">Task Due Date:</span>
+                    <input 
+                        class="bg-white w-1/2 py-1 px-3 rounded-lg text-md" 
+                        type="text" 
+                        id="CREATE_TASK10_DUED"
+                        name="TASK10_DUED"
+                    />
+                </div>
+            </div>
+        <?php } break;
         case Mode::EDIT_MODE: { 
             $statusValue = $task->getStatusValue(); ?>
             <div class="flex flex-col gap-6 w-full p-6 mt-8 rounded-xl bg-gray-200">
@@ -69,17 +113,18 @@ use App\Models\Mode;
                     <input 
                         class="bg-white w-1/2 py-1 px-3 rounded-lg text-md" 
                         type="text" 
+                        id="EDIT_TASK10_TITL"
                         name="TASK10_TITL"
                         value="<?= $task->getTitle() ?>"
                     />
                 </div>
                 <div class="flex flex-row items-center w-full px-10 py-6 rounded-xl bg-gray-100">
                     <span class="font-bold min-w-1/6 mr-4">Task Description:</span>
-                    <textarea class="w-full bg-white py-1 px-3 rounded-lg text-md" name="TASK10_DESC"><?= $task->getDesc() ?></textarea>
+                    <textarea class="w-full bg-white py-1 px-3 rounded-lg text-md" name="TASK10_DESC" id="EDIT_TASK10_DESC"><?= $task->getDesc() ?></textarea>
                 </div>
                 <div class="flex flex-row items-center w-full px-10 py-6 rounded-xl bg-gray-100">
                     <span class="font-bold min-w-1/6 mr-4">Task Status:</span>
-                    <select class="bg-white py-1 px-3 rounded-lg text-md" name="TASK10_STUS">
+                    <select class="bg-white py-1 px-3 rounded-lg text-md" name="TASK10_STUS" id="EDIT_TASK10_STUS">
                         <option value="0" <?= ($statusValue == "0") ? 'selected="selected"' : ''?>>Incomplete</option>
                         <option value="1" <?= ($statusValue == "1") ? 'selected="selected"' : ''?>>In Progress</option>
                         <option value="2" <?= ($statusValue == "2") ? 'selected="selected"' : ''?>>Complete</option>
@@ -95,25 +140,12 @@ use App\Models\Mode;
                         value="<?= $task->getDueDate() ?>"
                     />
                 </div>
-                <div class="flex flex-row items-center w-full px-10 py-6 rounded-xl bg-gray-100">
-                    <span class="font-bold min-w-1/6 mr-4">Modified Date:</span>
-                    <input 
-                        class="bg-white w-1/2 py-1 px-3 rounded-lg text-md" 
-                        type="text" 
-                        id="EDIT_TASK10_LUPD"
-                        name="TASK10_LUPD"
-                        value="<?= $task->getModifiedDate() ?>"
-                    />
-                </div>
-                <div class="flex flex-row items-center w-full px-10 py-6 rounded-xl bg-gray-100">
-                    <span class="font-bold min-w-1/6 mr-4">Created Date:</span>
-                    <input 
-                        class="bg-white w-1/2 py-1 px-3 rounded-lg text-md" 
-                        type="text" 
-                        id="EDIT_TASK10_CRTD"
-                        name="TASK10_CRTD"
-                        value="<?= $task->getCreatedDate() ?>"
-                    />
+            </div>
+        <?php } break; 
+        case Mode::WARNING_MODE: { ?>
+            <div class="flex flex-col gap-6 w-full p-6 mt-8 rounded-xl bg-gray-200">
+                <div class="flex flex-row w-full px-10 py-6 rounded-xl bg-gray-100">
+                    <span> Are you sure you want to delete this task? </span>
                 </div>
             </div>
         <?php } break; ?>

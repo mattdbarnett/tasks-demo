@@ -25,6 +25,10 @@ class Task {
     public $TASK10_DFLG; // Delete Flag
 
     public function __construct($id = null, $title = null, $desc = null, $status = null, $date = null) {
+        $this->constructFromInput($id, $title, $desc, $status, $date);
+    }
+
+    public function constructFromInput($id, $title, $desc, $status, $date) {
         $this->TASK10_ID = $id;
         $this->TASK10_TITL = $title;
         $this->TASK10_DESC = $desc;
