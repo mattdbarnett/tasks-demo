@@ -15,4 +15,4 @@ use App\Http\Controllers\TaskController;
 |
 */
 Route::get('/', [HomeController::class,'index'])->name('home');
-Route::post('/tasks/getTaskById', [TaskController::class,'getTaskById'])->name('getTaskById');
+Route::post('/tasks/viewTask', [TaskController::class,'viewTask'])->name('viewTask');

@@ -36,7 +36,7 @@
             <div class="w-full max-w-1/8 mr-4">
                 Task Title
             </div>
-            <div class="w-full max-w-1/6 mr-6">
+            <div class="w-full max-w-2/6 mr-6">
                 Task Description
             </div>
             <div class="w-full max-w-1/6 mr-4">
@@ -51,11 +51,11 @@
         </div>
 
         @foreach ( $tasks as $task )
-            <div class="task-row flex flex-row w-full px-10 py-6 rounded-xl bg-gray-100" row-id="{{ $task->getId() }}">
+            <div class="task-row flex flex-row items-center w-full px-10 py-6 rounded-xl bg-gray-100" task-id="{{ $task->getId() }}">
                 <div class="w-full max-w-1/8 mr-4">
                     {{ $task->getTitle() }}
                 </div>
-                <div class="w-full max-w-1/6 mr-6">
+                <div class="w-full max-w-2/6 mr-6">
                     {{ $task->getDescShort() }}
                 </div>
                 <div class="w-full max-w-1/6 mr-4">
@@ -82,7 +82,7 @@
     <!-- Modal HTML -->
     <div id="modal" class="hidden absolute w-full h-full top-0 left-0">
 
-        <div class="absolute top-0 left-0">
+        <div class="absolute w-full top-0 left-0">
             <div id="modal-bg" class="absolute left-0 top-0 w-screen h-full w-full bg-black opacity-50">
             </div>
             <div id="modal-content" class="w-[80%] left-0 py-16 mx-auto">

@@ -2,18 +2,20 @@
 namespace App\Http\Controllers;
 
 use App\Models\Task;
+use App\Models\Mode;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class TaskController extends Controller {
 
-    public function getTaskById(Request $request) {
+    public function viewTask(Request $request) {
 
         /**
-         * Get the Task ID from request
+         * Get request variables
          */
         $taskId = $request->id;
+        $mode = $request->mode;
 
         /**
          * Throw an error if we don't have a valid Task ID.
@@ -54,12 +56,31 @@ class TaskController extends Controller {
         $task->constructFromObj($taskData[0]);
 
         /**
+         * Get the correct title based on the mode
+         */
+        $title = 'INVALID';
+        switch ($mode) {
+            case Mode::VIEW_MODE:
+                $title = 'View Task ';
+                break;
+            case Mode::EDIT_MODE:
+                $title = 'Edit Task ';
+                break;
+            case Mode::DELETE_MODE:
+                $title = 'Delete Task ';
+                break;
+        }
+
+                
+
+        /**
          * Convert valid Task into view
          */
         $taskView = view(
             'partials.task-view', 
             [
-                'title' => 'View Task ' . $task->getIdShort(), 
+                'mode' => $mode,
+                'title' => $title . $task->getIdShort(), 
                 'task' => $task
             ]
         );
@@ -68,7 +89,7 @@ class TaskController extends Controller {
         /**
          * Return valid Task
          */
-        return response()->json(['html' => $html]);
+        return response()->json(['mode' => Mode::EDIT_MODE, 'html' => $html]);
     }
 
 }
