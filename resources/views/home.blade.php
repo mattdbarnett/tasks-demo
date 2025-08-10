@@ -12,7 +12,7 @@
     @vite('resources/js/home.js')
 </head>
 
-<body class="m-16 bg-white">
+<body class="relative p-16 bg-white">
     
     <div class="flex flex-row gap-6">
         <div class="flex items-center px-10 py-6 rounded-xl bg-gray-200">
@@ -31,18 +31,18 @@
         </div>
     </div>
     
-    <div class="w-full px-10 my-6 py-6 rounded-xl bg-gray-200">
-        <div class="flex flex-row w-full px-10 my-6 py-6 rounded-xl bg-gray-100 font-bold">
-            <div class="w-full max-w-1/6">
+    <div class="flex flex-col w-full px-6 my-6 py-6 gap-6 rounded-xl bg-gray-200">
+        <div class="flex flex-row w-full px-10 py-6 rounded-xl bg-gray-100 font-bold">
+            <div class="w-full max-w-1/8 mr-4">
                 Task Title
             </div>
-            <div class="w-full max-w-1/6">
+            <div class="w-full max-w-1/6 mr-6">
                 Task Description
             </div>
-            <div class="w-full max-w-1/6">
+            <div class="w-full max-w-1/6 mr-4">
                 Task Status
             </div>
-            <div class="w-full max-w-1/6">
+            <div class="w-full max-w-1/6 mr-4">
                 Task Due-Date
             </div>
             <div class="w-full max-w-2/8 ml-auto">
@@ -51,17 +51,17 @@
         </div>
 
         @foreach ( $tasks as $task )
-            <div class="task-row flex flex-row w-full px-10 my-6 py-6 rounded-xl bg-gray-100" row-id="{{ $task->getId() }}">
-                <div class="w-full max-w-1/6">
+            <div class="task-row flex flex-row w-full px-10 py-6 rounded-xl bg-gray-100" row-id="{{ $task->getId() }}">
+                <div class="w-full max-w-1/8 mr-4">
                     {{ $task->getTitle() }}
                 </div>
-                <div class="w-full max-w-1/6">
-                    {{ $task->getDesc() }}
+                <div class="w-full max-w-1/6 mr-6">
+                    {{ $task->getDescShort() }}
                 </div>
-                <div class="w-full max-w-1/6">
+                <div class="w-full max-w-1/6 mr-4">
                     {{ $task->getStatus() }}
                 </div>
-                <div class="w-full max-w-1/6">
+                <div class="w-full max-w-1/6 mr-4">
                     {{ $task->getDueDate() }}
                 </div>
                 <div class="w-full max-w-2/8 ml-auto">
@@ -82,10 +82,12 @@
     <!-- Modal HTML -->
     <div id="modal" class="hidden absolute w-full h-full top-0 left-0">
 
-        <div id="modal-bg" class="w-screen h-full bg-black opacity-50">
-        </div>
+        <div class="absolute top-0 left-0">
+            <div id="modal-bg" class="absolute left-0 top-0 w-screen h-full w-full bg-black opacity-50">
+            </div>
+            <div id="modal-content" class="w-[80%] left-0 py-16 mx-auto">
 
-        <div id="modal-content" class="absolute w-screen px-64 py-16 top-0 left-0">
+            </div>
         </div>
         
     </div>

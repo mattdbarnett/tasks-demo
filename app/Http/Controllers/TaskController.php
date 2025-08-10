@@ -51,12 +51,24 @@ class TaskController extends Controller {
          * Convert Task Data into Task Object
          */
         $task = new Task;
-        $task->constructFromObj($taskData);
+        $task->constructFromObj($taskData[0]);
+
+        /**
+         * Convert valid Task into view
+         */
+        $taskView = view(
+            'partials.task-view', 
+            [
+                'title' => 'View Task ' . $task->getIdShort(), 
+                'task' => $task
+            ]
+        );
+        $html = $taskView->render();
 
         /**
          * Return valid Task
          */
-        return response()->json($task);
+        return response()->json(['html' => $html]);
     }
 
 }

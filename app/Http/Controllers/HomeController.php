@@ -16,6 +16,7 @@ class HomeController extends Controller {
             $newTask->constructFromObj($taskData);
             $tasks[] = $newTask;
         }
+
         return view('home', ['tasks' => $tasks]);
     }
 

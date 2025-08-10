@@ -12,11 +12,10 @@ $(document).ready(function () {
                 'id': taskId
             },
             success:function(data) {
-                console.log(data);
+                $('#modal-content').html(data.html);
+                $('#modal').show();
             }
         });
-
-        $('#modal').show();
     });
 
     $('#modal-bg').click( function() {

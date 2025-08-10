@@ -51,12 +51,24 @@ class Task {
         return $this->TASK10_ID;
     }
 
+    public function getIdShort() {
+        return (float) $this->TASK10_ID;
+    }
+
     public function getTitle() {
         return $this->TASK10_TITL;
     }
 
     public function getDesc() {
         return $this->TASK10_DESC;
+    }
+
+    public function getDescShort() {
+        if ( strlen($this->TASK10_DESC) > 64 ) {
+            return substr($this->TASK10_DESC,0,64) . '...';
+        } else {
+            return $this->getDesc();
+        }
     }
 
     public function getStatus() {
@@ -72,7 +84,19 @@ class Task {
         }
     }
 
+    public function getStatusValue() {
+        return $this->TASK10_STUS;
+    }
+
     public function getDueDate() {
         return $this->TASK10_DUED;
+    }
+
+    public function getModifiedDate() {
+        return $this->TASK10_LUPD;
+    }
+
+    public function getCreatedDate() {
+        return $this->TASK10_CRTD;
     }
 }
