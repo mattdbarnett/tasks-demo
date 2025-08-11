@@ -17,7 +17,7 @@ Please note, this project currently only runs on Windows.
 3. In the project root, run the following commands in the order listed:
     `composer install`
     `npm install`
-    `npm run watch`
+    `npm run dev`
 
 3. Click on the WAMP icon on your taskbar, hover over "Apache" then click "*httpd-vhosts.conf*". This will open your WAMP virtual hosts. Add the following entry to the end of this file and save:
 ```
