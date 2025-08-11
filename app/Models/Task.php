@@ -92,6 +92,14 @@ class Task {
         return $this->TASK10_STUS;
     }
 
+    public static function getStatusValues() {
+        return [0, 1, 2];
+    }
+
+    public function setStatus($status) {
+        $this->TASK10_STUS = $status;
+    }
+
     public function getDueDate() {
         return $this->TASK10_DUED;
     }

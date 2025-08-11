@@ -12,22 +12,22 @@
     @vite('resources/js/home.js')
 </head>
 
-<body class="relative p-16 bg-white">
+<body class="relative p-8 lg:p-16 bg-white">
     
-    <div id="action-header" class="flex flex-row gap-6">
+    <div id="action-header" class="flex flex-col xl:flex-row gap-6">
         <div class="flex items-center px-10 py-6 rounded-xl bg-gray-200">
-            <h1 class="text-4xl font-bold whitespace-nowrap">Tasks Demo for DTS</h1>
+            <h1 class="text-4xl font-bold whitespace-wrap lg:whitespace-nowrap">Tasks Demo for DTS</h1>
         </div>
-        <div class="flex gap-2 item-center w-full px-8 py-6 rounded-xl bg-gray-100">
+        <div class="flex flex-col lg:flex-row gap-2 item-center w-full px-8 py-6 rounded-xl bg-gray-100">
             <a id="task-create-btn" class="inline-block min-h-[48px] px-6 py-3 rounded-xl bg-green-400 hover:bg-green-500 text-white font-bold cursor-pointer transition"">
                 Create a Task
             </a>
-            <a class="inline-block min-h-[48px] px-6 py-3 rounded-xl bg-gray-400 hover:bg-gray-500 text-white font-bold cursor-pointer transition"">
+            <!-- <a class="inline-block min-h-[48px] px-6 py-3 rounded-xl bg-gray-400 hover:bg-gray-500 text-white font-bold cursor-pointer transition"">
                 Dump Tasks
             </a>
             <a class="inline-block min-h-[48px] px-6 py-3 rounded-xl bg-red-400 hover:bg-red-500 text-white font-bold cursor-pointer transition"">
                 Delete All
-            </a>
+            </a> -->
         </div>
     </div>
 
@@ -87,7 +87,7 @@
     </div>
     
     <div id="tasks" class="flex flex-col w-full px-6 my-6 py-6 gap-6 rounded-xl bg-gray-200">
-        <div class="flex flex-row w-full px-10 py-6 rounded-xl bg-gray-100 font-bold">
+        <div class="hidden xl:flex flex-row w-full px-10 py-6 rounded-xl bg-gray-100 font-bold">
             <div class="w-full max-w-1/8 mr-4">
                 Task Title
             </div>
@@ -106,20 +106,20 @@
         </div>
 
         @foreach ( $tasks as $task )
-            <div class="task-row flex flex-row items-center w-full px-10 py-6 rounded-xl bg-gray-100" task-id="{{ $task->getId() }}">
-                <div class="w-full max-w-1/8 mr-4">
+            <div class="task-row flex flex-col xl:flex-row gap-8 xl:gap-0 items-start xl:items-center w-full px-10 py-6 rounded-xl bg-gray-100" task-id="{{ $task->getId() }}">
+                <div class="w-full max-w-max xl:max-w-1/8 mr-4">
                     {{ $task->getTitle() }}
                 </div>
-                <div class="w-full max-w-2/6 mr-6">
+                <div class="w-full max-w-max xl:max-w-2/6 mr-6">
                     {{ $task->getDescShort() }}
                 </div>
-                <div class="w-full max-w-1/6 mr-4">
+                <div class="w-full max-w-max xl:max-w-1/6 mr-4">
                     {{ $task->getStatus() }}
                 </div>
-                <div class="w-full max-w-1/6 mr-4">
+                <div class="w-full max-w-max xl:max-w-1/6 mr-4">
                     {{ $task->getDueDate() }}
                 </div>
-                <div class="flex gap-2 w-full max-w-2/8 ml-auto">
+                <div class="flex flex-col lg:flex-row gap-2 w-full min-w-2/8 ml-0 xl:ml-auto">
                     <a class="task-view-btn inline-block min-h-[48px] px-6 py-3 rounded-xl bg-blue-400 hover:bg-blue-500 text-white font-bold cursor-pointer transition">
                         View
                     </a>
@@ -141,7 +141,6 @@
             <div id="modal-bg" class="absolute left-0 top-0 w-screen min-h-screen h-full w-full bg-black opacity-50">
             </div>
             <div id="modal-content" class="w-[80%] left-0 py-16 mx-auto">
-
             </div>
         </div>
         

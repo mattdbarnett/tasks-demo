@@ -4,7 +4,7 @@ use App\Models\Mode;
 
 <div class="relative p-8 w-full h-full bg-white z-10 rounded-xl">
     <div id="modal-task-id" task-id="<?= $task->getId() ?>"></div>
-    <div class="flex flex-row gap-6">
+    <div class="flex flex-col xl:flex-row gap-6">
         <div class="flex items-center px-10 py-6 rounded-xl bg-gray-200">
             <h1 class="text-4xl font-bold whitespace-nowrap">
                 {{ $title }}
@@ -44,7 +44,7 @@ use App\Models\Mode;
      */
     switch($mode) {
         case Mode::VIEW_MODE: { ?>
-            <div class="flex flex-col gap-6 w-full p-6 mt-8 rounded-xl bg-gray-200">
+            <div class="flex flex-col gap-6 w-full p-6 mt-6 rounded-xl bg-gray-200">
                 <div class="flex flex-row w-full px-10 py-6 rounded-xl bg-gray-100">
                     <span class="font-bold min-w-1/6 mr-4">Task Title:</span>
                     <span> {{ $task->getTitle() }} </span>
@@ -72,8 +72,8 @@ use App\Models\Mode;
             </div>
         <?php } break;
         case Mode::CREATE_MODE: { ?>
-            <div class="flex flex-col gap-6 w-full p-6 mt-8 rounded-xl bg-gray-200">
-                <div class="flex flex-row items-center w-full px-10 py-6 rounded-xl bg-gray-100">
+            <div class="flex flex-col gap-6 w-full p-6 mt-6 rounded-xl bg-gray-200">
+                <div class="flex flex-col lg:flex-row items-start lg:items-center w-full px-10 py-6 rounded-xl bg-gray-100">
                     <span class="font-bold min-w-1/6 mr-4">Task Title:</span>
                     <input 
                         class="bg-white w-1/2 py-1 px-3 rounded-lg text-md" 
@@ -82,11 +82,11 @@ use App\Models\Mode;
                         name="TASK10_TITL"
                     />
                 </div>
-                <div class="flex flex-row items-center w-full px-10 py-6 rounded-xl bg-gray-100">
+                <div class="flex flex-col lg:flex-row items-start lg:items-center w-full px-10 py-6 rounded-xl bg-gray-100">
                     <span class="font-bold min-w-1/6 mr-4">Task Description:</span>
                     <textarea class="w-full bg-white py-1 px-3 rounded-lg text-md" name="TASK10_DESC" id="CREATE_TASK10_DESC"></textarea>
                 </div>
-                <div class="flex flex-row items-center w-full px-10 py-6 rounded-xl bg-gray-100">
+                <div class="flex flex-col lg:flex-row items-start lg:items-center w-full px-10 py-6 rounded-xl bg-gray-100">
                     <span class="font-bold min-w-1/6 mr-4">Task Status:</span>
                     <select class="bg-white py-1 px-3 rounded-lg text-md" name="TASK10_STUS" id="CREATE_TASK10_STUS">
                         <option value="0" selected="selected">Incomplete</option>
@@ -94,7 +94,7 @@ use App\Models\Mode;
                         <option value="2">Complete</option>
                     </select>
                 </div>
-                <div class="flex flex-row items-center w-full px-10 py-6 rounded-xl bg-gray-100">
+                <div class="flex flex-col lg:flex-row items-start lg:items-center w-full px-10 py-6 rounded-xl bg-gray-100">
                     <span class="font-bold min-w-1/6 mr-4">Task Due Date:</span>
                     <input 
                         class="bg-white w-1/2 py-1 px-3 rounded-lg text-md" 
@@ -107,8 +107,8 @@ use App\Models\Mode;
         <?php } break;
         case Mode::EDIT_MODE: { 
             $statusValue = $task->getStatusValue(); ?>
-            <div class="flex flex-col gap-6 w-full p-6 mt-8 rounded-xl bg-gray-200">
-                <div class="flex flex-row items-center w-full px-10 py-6 rounded-xl bg-gray-100">
+            <div class="flex flex-col gap-6 w-full p-6 mt-6 rounded-xl bg-gray-200">
+                <div class="flex flex-col lg:flex-row items-start lg:items-center w-full px-10 py-6 rounded-xl bg-gray-100">
                     <span class="font-bold min-w-1/6 mr-4">Task Title:</span>
                     <input 
                         class="bg-white w-1/2 py-1 px-3 rounded-lg text-md" 
@@ -118,11 +118,11 @@ use App\Models\Mode;
                         value="<?= $task->getTitle() ?>"
                     />
                 </div>
-                <div class="flex flex-row items-center w-full px-10 py-6 rounded-xl bg-gray-100">
+                <div class="flex flex-col lg:flex-row items-start lg:items-center w-full px-10 py-6 rounded-xl bg-gray-100">
                     <span class="font-bold min-w-1/6 mr-4">Task Description:</span>
                     <textarea class="w-full bg-white py-1 px-3 rounded-lg text-md" name="TASK10_DESC" id="EDIT_TASK10_DESC"><?= $task->getDesc() ?></textarea>
                 </div>
-                <div class="flex flex-row items-center w-full px-10 py-6 rounded-xl bg-gray-100">
+                <div class="flex flex-col lg:flex-row items-start lg:items-center w-full px-10 py-6 rounded-xl bg-gray-100">
                     <span class="font-bold min-w-1/6 mr-4">Task Status:</span>
                     <select class="bg-white py-1 px-3 rounded-lg text-md" name="TASK10_STUS" id="EDIT_TASK10_STUS">
                         <option value="0" <?= ($statusValue == "0") ? 'selected="selected"' : ''?>>Incomplete</option>
@@ -130,7 +130,7 @@ use App\Models\Mode;
                         <option value="2" <?= ($statusValue == "2") ? 'selected="selected"' : ''?>>Complete</option>
                     </select>
                 </div>
-                <div class="flex flex-row items-center w-full px-10 py-6 rounded-xl bg-gray-100">
+                <div class="flex flex-col lg:flex-row items-start lg:items-center w-full px-10 py-6 rounded-xl bg-gray-100">
                     <span class="font-bold min-w-1/6 mr-4">Task Due Date:</span>
                     <input 
                         class="bg-white w-1/2 py-1 px-3 rounded-lg text-md" 
@@ -143,7 +143,7 @@ use App\Models\Mode;
             </div>
         <?php } break; 
         case Mode::WARNING_MODE: { ?>
-            <div class="flex flex-col gap-6 w-full p-6 mt-8 rounded-xl bg-gray-200">
+            <div class="flex flex-col gap-6 w-full p-6 mt-6 rounded-xl bg-gray-200">
                 <div class="flex flex-row w-full px-10 py-6 rounded-xl bg-gray-100">
                     <span> Are you sure you want to delete this task? </span>
                 </div>

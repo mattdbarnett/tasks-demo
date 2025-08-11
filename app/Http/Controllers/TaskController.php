@@ -1,20 +1,34 @@
 <?php
 namespace App\Http\Controllers;
 
-use App\Models\Task;
-use App\Models\Mode;
+use Exception;
+
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
+
+use App\Models\Task;
+use App\Models\Mode;
+
+use App\Services\TaskService;
 
 class TaskController extends Controller {
 
     public function viewTask(Request $request) {
-        /**
-         * Get request variables
-         */
-        $taskId = $request->id;
-        $mode = $request->mode;
+
+        $TASK10_ID = ( $request->TASK10_ID ) ? $request->TASK10_ID : false;
+        $mode = ( $request->mode ) ? $request->mode : Mode::VIEW_MODE;
+
+        if ( $TASK10_ID === false && $mode !== Mode::CREATE_MODE ) {
+            return response()->json(
+                array(
+                    'code'      =>  400,
+                    'message'   =>  "Missing essential ID Field."
+                ), 
+                400
+            );
+        }
 
         /**
          * If we're in create mode, instance a task without an ID.
@@ -25,7 +39,8 @@ class TaskController extends Controller {
         if ( $mode === Mode::CREATE_MODE ) {
             $task = new Task();
         } else {
-            $task = $this->getTaskById($taskId);
+            $taskService = new TaskService();
+            $task = $taskService->getTaskById($TASK10_ID);
             if ( $task instanceof Response ) {
                 return $task;
             }
@@ -63,112 +78,139 @@ class TaskController extends Controller {
         /**
          * Return modal view to JS
          */
-        return response()->json(['mode' => Mode::EDIT_MODE, 'html' => $html]);
+        return response()->json(
+            array(
+                'code' => 200,
+                'html' => $html
+            ),
+            200
+        );
     }
 
     public function createTask(Request $request) {
+
         /**
-         * Initalise new task object
+         * Get & verify request variables
          */
-        $task = new Task(
-            null, 
-            $request->TASK10_TITL, 
-            $request->TASK10_DESC, 
-            $request->TASK10_STUS, 
-            $request->TASK10_DUED
+        $TASK10_TITL = ( $request->TASK10_TITL ) ? $request->TASK10_TITL : false;
+        $TASK10_DESC = ( $request->TASK10_DESC ) ? $request->TASK10_DESC : '';
+        $TASK10_STUS = ( $request->TASK10_STUS || 
+                         $request->TASK10_STUS === 0 ||
+                         $request->TASK10_STUS === "0" ) ? $request->TASK10_STUS : false;
+        $TASK10_DUED = ( $request->TASK10_DUED ) ? $request->TASK10_DUED : false;  
+
+        if ( $TASK10_TITL === false ||
+             $TASK10_STUS === false || 
+             $TASK10_DUED === false ) {
+            return response()->json(
+                array(
+                    'code'      =>  400,
+                    'message'   =>  "Missing essential Task field(s)."
+                ), 
+                400
+            );
+        }
+
+        $taskService = new TaskService();
+        $dbResponse = $taskService->createTask($TASK10_TITL, $TASK10_DESC, $TASK10_STUS, $TASK10_DUED);
+
+        /**
+         * If the task is a JsonResponse, it means an error occurred.
+         */
+        if ( $dbResponse instanceof JsonResponse ) {
+            return response()->json(
+                array(
+                    'code'      =>  400,
+                    'message'   =>  "Failed to create Task.",
+                    'error'     => $dbResponse->getData()->message
+                ),
+            );
+        }
+
+        /**
+         * Return success response
+         */
+        return response()->json(
+            array(
+                'code'      => 200,
+                'message'   => "Task created successfully."
+            ),
+            200
         );
-
-        /**
-         * Create the task row
-         */
-        $query = 
-            'INSERT INTO 
-                tdtask10
-                (TASK10_TITL,
-                TASK10_DESC,
-                TASK10_STUS,
-                TASK10_DUED,
-                TASK10_CRTD,
-                TASK10_CRTU,
-                TASK10_CRTP,
-                TASK10_LUPD,
-                TASK10_LUPU,
-                TASK10_LUPP,
-                TASK10_DFLG)
-            VALUES
-                (   
-                    "' . $task->getTitle() . '",
-                    "' . $task->getDesc() . '",
-                    "' . $task->getStatusValue() . '",
-                    "' . $task->getDueDate() . '",
-                    "' . date('Y-m-d H:i:s') . '",
-                    0,
-                    "TaskController - createTask",
-                    "' . date('Y-m-d H:i:s') . '",
-                    0,
-                    "TaskController - createTask",
-                    0
-                );
-            ';
-                
-        $dbResponse = DB::insert($query);
-
-        /**
-         * Return database response
-         */
-        return response()->json(['success' => $dbResponse]);
     }
 
     public function updateTask(Request $request) {
+
         /**
-         * Initalise new task object
+         * Get & verify request variables
          */
-        $task = new Task(
-            $request->TASK10_ID, 
-            $request->TASK10_TITL, 
-            $request->TASK10_DESC, 
-            $request->TASK10_STUS, 
-            $request->TASK10_DUED
-        );
+        $TASK10_ID = ( $request->TASK10_ID ) ? $request->TASK10_ID : false;
+        $TASK10_TITL = ( $request->TASK10_TITL ) ? $request->TASK10_TITL : false;
+        $TASK10_DESC = ( $request->TASK10_DESC ) ? $request->TASK10_DESC : '';
+        $TASK10_STUS = ( $request->TASK10_STUS || 
+                         $request->TASK10_STUS === 0 ||
+                         $request->TASK10_STUS === "0" ) ? $request->TASK10_STUS : false;
+        $TASK10_DUED = ( $request->TASK10_DUED ) ? $request->TASK10_DUED : false;  
+
+        if ( $TASK10_ID === false ||
+             $TASK10_TITL === false ||
+             $TASK10_STUS === false || 
+             $TASK10_DUED === false ) {
+            return response()->json(
+                array(
+                    'code'      =>  400,
+                    'message'   =>  "Missing essential Task field(s)."
+                ), 
+                400
+            );
+        }
 
         /**
          * Update the DB
          */
-        $query = 
-            'UPDATE 
-                tdtask10 
-            SET 
-                TASK10_TITL = "' . $task->getTitle() . '", 
-                TASK10_DESC = "' . $task->getDesc() . '", 
-                TASK10_STUS = ' . $task->getStatusValue() . ', 
-                TASK10_DUED = "' . $task->getDueDate() . '", 
-                TASK10_LUPD = "' . date('Y-m-d H:i:s') . '", 
-                TASK10_LUPU = 0, 
-                TASK10_LUPP = "TaskController - updateTask" 
-            WHERE 
-                TASK10_ID = ' . $task->getId() . ' 
-            AND 
-                TASK10_DFLG = 0';
-                
-        $dbResponse = DB::update($query);
-        $success = ( $dbResponse === 1 ) ? true : false;
+        $taskService = new TaskService();
+        $dbResponse = $taskService->updateTask($TASK10_ID, $TASK10_TITL, $TASK10_DESC, $TASK10_STUS, $TASK10_DUED);
+
+        /**
+         * If the task is a JsonResponse, it means an error occurred.
+         */
+        if ( $dbResponse instanceof JsonResponse ) {
+            return $dbResponse;
+        }
 
         /**
          * Return database response
          */
-        return response()->json(['success' => $success]);
+        return response()->json(
+            array(
+                'code'      => 200,
+                'message'   => "Task updated successfully."
+            ), 
+            200
+        );
     }
 
     public function warningTask(Request $request) {
+
         /**
          * Get request variables
          */
-        $taskId = $request->id;
+        $TASK10_ID = ( $request->TASK10_ID ) ? $request->TASK10_ID : false;
+
+        if ( $TASK10_ID === false  ) {
+            return response()->json(
+                array(
+                    'code'      =>  400,
+                    'message'   =>  "Missing essential ID Field."
+                ), 
+                400
+            );
+        }
 
         /**
          * Make new Task object
          */
-        $task = new Task($taskId);
+        $task = new Task($TASK10_ID);
 
         /**
          * Convert valid Task into view
@@ -186,85 +228,52 @@ class TaskController extends Controller {
         /**
          * Return database response
          */
-        return response()->json(['html' => $html]);
+        return response()->json(
+            array(
+                'code'      => 200,
+                'html'      => $html
+            ),
+            200
+        );
     }
 
     public function deleteTask(Request $request) {
-        /**
-         * Get request variables
-         */
-        $taskId = $request->id;
 
         /**
-         * Make new Task object
+         * Get & verify request variables
          */
-        $task = new Task($taskId);
+        $TASK10_ID = ( $request->TASK10_ID ) ? $request->TASK10_ID : false;
+
+        if ( $TASK10_ID === false ) {
+            return response()->json(
+                array(
+                    'code'      =>  400,
+                    'message'   =>  "Missing essential ID Field."
+                ), 
+                400
+            );
+        }
+
+        $taskService = new TaskService();
+        $task = $taskService->deleteTask($TASK10_ID);
 
         /**
-         * Delete task in DB
+         * If the task is a JsonResponse, it means an error occurred.
          */
-        $query = 
-            'UPDATE 
-                tdtask10 
-            SET 
-                TASK10_LUPD = "' . date('Y-m-d H:i:s') . '", 
-                TASK10_LUPU = 0, 
-                TASK10_LUPP = "TaskController - deleteTask",
-                TASK10_DFLG = 1 
-            WHERE 
-                TASK10_ID = ' . $task->getId() . '
-            AND 
-                TASK10_DFLG = 0';
-                
-        $dbResponse = DB::update($query);
-        $success = ( $dbResponse === 1 ) ? true : false;
+        if ( $task instanceof JsonResponse ) {
+            return $task;
+        }
 
         /**
          * Return database response
          */
-        return response()->json(['success' => $success]);
-    }
-
-    private function getTaskById($taskId) {
-
-        /**
-         * Throw an error if we don't have a valid Task ID.
-         */
-        if( $taskId === null || $taskId === false ) {
-            return Response::json(
-                array(
-                    'code'      =>  400,
-                    'message'   =>  "Invalid task ID."
-                ), 
-                400
-            );
-        }
-
-        /**
-         * Query the database with Eloquent using the valid Task ID.
-         */
-        $taskData = DB::table('tdtask10')->where('TASK10_ID', $taskId)->where('TASK10_DFLG', '0')->first();
-
-        /**
-         * Throw an error if a Task with that ID doesn't exist.
-         */
-        if( $taskData === null || $taskData === false || empty($taskData) ) {
-            return Response::json(
-                array(
-                    'code'      =>  400,
-                    'message'   =>  "Task no longer exists."
-                ), 
-                400
-            );
-        }
-
-        /**
-         * Convert Task Data into Task Object
-         */
-        $task = new Task;
-        $task->constructFromObj($taskData);
-
-        return $task;
+        return response()->json(
+            array(
+                'code'      => 200,
+                'message'   => 'Succesfully deleted Task'
+            ),
+            200
+        );
     }
 
 }

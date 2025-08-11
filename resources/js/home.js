@@ -13,7 +13,7 @@ $(document).ready(function () {
     $('#action-header').on('click', '#task-create-btn', function() {
         $.ajax({
             type:'POST',
-            url:'/tasks/viewTask',
+            url:'/tasks/view-task',
             data: {
                 '_token': $('meta[name="csrf-token"]').attr('content'),
                 'mode': "*CREATE",
@@ -37,11 +37,11 @@ $(document).ready(function () {
         var taskId = $(this).closest('.task-row').attr('task-id');
         $.ajax({
             type:'POST',
-            url:'/tasks/viewTask',
+            url:'/tasks/view-task',
             data: {
                 '_token': $('meta[name="csrf-token"]').attr('content'),
                 'mode': "*VIEW",
-                'id': taskId
+                'TASK10_ID': taskId
             },
             success:function(data) {
                 $('#modal-content').html(data.html);
@@ -57,11 +57,11 @@ $(document).ready(function () {
         var taskId = $(this).closest('.task-row').attr('task-id');
         $.ajax({
             type:'POST',
-            url:'/tasks/viewTask',
+            url:'/tasks/view-task',
             data: {
                 '_token': $('meta[name="csrf-token"]').attr('content'),
                 'mode': "*EDIT",
-                'id': taskId
+                'TASK10_ID': taskId
             },
             success:function(data) {
                 $('#modal-content').html(data.html);
@@ -78,13 +78,12 @@ $(document).ready(function () {
         var taskId = $(this).closest('.task-row').attr('task-id');
         $.ajax({
             type:'POST',
-            url:'/tasks/warningTask',
+            url:'/tasks/warning-task',
             data: {
                 '_token': $('meta[name="csrf-token"]').attr('content'),
-                'id': taskId
+                'TASK10_ID': taskId
             },
             success:function(data) {
-                console.log(data);
                 $('#modal-content').html(data.html);
                 $('#modal').show();
             }
@@ -104,7 +103,7 @@ $(document).ready(function () {
         var TASK10_DUED = $('#modal #CREATE_TASK10_DUED').val();
         $.ajax({
             type:'POST',
-            url:'/tasks/createTask',
+            url:'/tasks/create-task',
             data: {
                 '_token': $('meta[name="csrf-token"]').attr('content'),
                 'TASK10_TITL': TASK10_TITL,
@@ -113,12 +112,10 @@ $(document).ready(function () {
                 'TASK10_DUED': TASK10_DUED
             },
             success:function(data) {
-                console.log(data);
-                if ( data.success === true ) {
-                    window.location.href = "?create-success=true";
-                } else {
-                    window.location.href = "?create-success=false";
-                }
+                window.location.href = "?create-success=true";
+            },
+            error:function(xhr, status, error) {
+                window.location.href = "?create-success=false";
             }
         });
     });
@@ -134,7 +131,7 @@ $(document).ready(function () {
         var TASK10_DUED = $('#modal #EDIT_TASK10_DUED').val();
         $.ajax({
             type:'POST',
-            url:'/tasks/updateTask',
+            url:'/tasks/update-task',
             data: {
                 '_token': $('meta[name="csrf-token"]').attr('content'),
                 'TASK10_ID': TASK10_ID,
@@ -144,11 +141,10 @@ $(document).ready(function () {
                 'TASK10_DUED': TASK10_DUED
             },
             success:function(data) {
-                if ( data.success === true ) {
-                    window.location.href = "?edit-success=true&id=" + TASK10_ID;
-                } else {
-                    window.location.href = "?edit-success=false&id=" + TASK10_ID;
-                }
+                window.location.href = "?edit-success=true&id=" + TASK10_ID;
+            },
+            error:function(xhr, status, error) {
+                window.location.href = "?edit-success=false&id=" + TASK10_ID;
             }
         });
     });
@@ -160,17 +156,16 @@ $(document).ready(function () {
         var TASK10_ID = $('#modal #modal-task-id').attr('task-id');
         $.ajax({
             type:'POST',
-            url:'/tasks/deleteTask',
+            url:'/tasks/delete-task',
             data: {
                 '_token': $('meta[name="csrf-token"]').attr('content'),
-                'id': TASK10_ID
+                'TASK10_ID': TASK10_ID
             },
             success:function(data) {
-                if ( data.success === true ) {
-                    window.location.href = "?delete-success=true&id=" + TASK10_ID;
-                } else {
-                    window.location.href = "?delete-success=false&id=" + TASK10_ID;
-                }
+                window.location.href = "?delete-success=true&id=" + TASK10_ID;
+            },
+            error:function(xhr, status, error) {
+                window.location.href = "?delete-success=false&id=" + TASK10_ID;
             }
         });
     });
