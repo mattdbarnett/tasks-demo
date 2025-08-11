@@ -1,66 +1,52 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# DTS Tasks Demo
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+# Setup
+Please note, this project currently only runs on Windows.
+1. Ensure you have the following downloaded and setup on your desktop:
+		- **WAMP** 
+		- **PHP 8.*x*.*x***
+		- **Apache 2.4.*xx***
+		- **MySQL 9.1.0**
+		- **Composer 2.8.10**
+		- **Node 22.17.1**
+		- **Git**
+		- **HeidiSQL**
+2. Clone into the "*C:\wamp64\www*" directory project using the following command:
+`git clone https://github.com/mattdbarnett/tasks-demo.git`
 
-## About Laravel
+3. In the project root, run the following commands in the order listed:
+    `composer install`
+    `npm install`
+    `npm run watch`
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+3. Click on the WAMP icon on your taskbar, hover over "Apache" then click "*httpd-vhosts.conf*". This will open your WAMP virtual hosts. Add the following entry to the end of this file and save:
+```
+    <VirtualHost *:80>
+      ServerName tasksdemo.local
+      ServerAlias tasksdemo.local
+      DocumentRoot "${INSTALL_DIR}/www/tasks-demo/public"
+      <Directory "${INSTALL_DIR}/www/tasks.demo/public/">
+        Options +Indexes +Includes +FollowSymLinks +MultiViews
+        AllowOverride All
+        Require local
+      </Directory>
+    </VirtualHost>
+```
+4. Run Notepad as administrator. Open the file named "*hosts*" found in "*C:\Windows\System32\drivers\etc\hosts*". Add the following line to the end of that file and save:
+    `127.0.0.1 tasksdemo.local`
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+5. Setup a localhost database server. Open localhost using HeidiSQL, open the query tab, then drag the file "*init.sql*" from within the project inside the folder named "*database*" to the whitespace below the tabs. When the file has populated the textarea, press the blue "*Execute SQL*" arrow button at the top of the screen.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+6. Reopen the WAMP menu from the taskbar and press "*Restart All Services*".
 
-## Learning Laravel
+7. Navigate to "*http://tasksdemo.local*" in your browser.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+# What I'd Add in the Futre
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
-
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+1. Add custom error message parsing based on what was returned from the failed responses to show in the popup instead of standard messages based on the current process (create, edit, delete, etc.) that currently appear.
+2. Add the success/failure popup to the page as an overlay element that disappears over time, rather than the current inline element that you have to close.
+3. Add full-edit functionality to the API.
+4. Add authentication to the the front-end and API utilising the *tduser10* table already present in the database.
+5. Add front-end validation to the edit and create task forms.
+6. Currently the program **is** responsive, but I believe the experience on mobile can be further improved.
+7. Add more depth and detail to this readme.
