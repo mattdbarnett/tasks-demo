@@ -41,7 +41,7 @@ Please note, this project currently only runs on Windows.
 
 7. Navigate to "*http://tasksdemo.local*" in your browser.
 
-# What I'd Add in the Futre
+# What I'd Add in the Future
 
 1. Add custom error message parsing based on what was returned from the failed responses to show in the popup instead of standard messages based on the current process (create, edit, delete, etc.) that currently appear.
 2. Add the success/failure popup to the page as an overlay element that disappears over time, rather than the current inline element that you have to close.
